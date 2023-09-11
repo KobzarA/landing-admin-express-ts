@@ -9,10 +9,17 @@ import { NavLink } from "react-router-dom";
 */
 const Aside = () => {
   return (
-    <aside>
-      <nav>
-        <NavLink to={"/"}>Main page</NavLink>
-        <NavLink to={"/orders"}>Orders</NavLink>
+    <aside className="min-h-full border-r border-zinc-700 p-4">
+      <h2 className="text-center text-lg">Navigation</h2>
+      <nav className="flex flex-col items-start  ">
+        <ul className="ml-6 divide-y-2 divide-cyan-800 dark:divide-cyan-800">
+          <li>
+            <NavLink to={"/"}>Main page</NavLink>
+          </li>
+          <li>
+            <NavLink to={"/orders"}>Orders</NavLink>
+          </li>
+        </ul>
       </nav>
     </aside>
   );

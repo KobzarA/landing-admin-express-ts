@@ -23,6 +23,7 @@
 */
 
 import tableOrdersDataAdapter from "../../libs/tableDataAdapter";
+import TableContainer from "../Tables/TableContainer";
 import TableTemplate from "../Tables/TableTempalte";
 
 const ordersJson = `
@@ -65,7 +66,6 @@ const ordersJson = `
 const orders = JSON.parse(ordersJson);
 
 const OrdersPage = () => {
-  debugger;
   const tableData = tableOrdersDataAdapter(orders);
 
   return (
@@ -73,6 +73,8 @@ const OrdersPage = () => {
       My greeting to Order page of admin service
       <h1>Yoohoo</h1>
       <TableTemplate data={tableData} />
+      <h2>Second experimental table</h2>
+      <TableContainer data={tableData} />
     </>
   );
 };
