@@ -4,42 +4,48 @@ export interface TableData {
 }
 
 const TableTemplate = ({ data }: { data: TableData }) => {
-  debugger;
+  // Check for incoming data
   if (!data.columnsNames) return <div>"No data is downloaded"</div>;
 
+  // create table headers
   const columns = data.columnsNames.map((item) => {
-    return <th>{item}</th>;
+    return <th className="border border-slate-600">{item}</th>;
   });
 
+  const tdStyles = "border border-slate-700 p-2";
   const rows = data.rowsData.map((rowData) => {
     const row = rowData.map((data) => {
+      // Checking if data array if yes return mapped list in cell
       if (Array.isArray(data)) {
         return (
-          <td>
-            {data.map((item) => (
-              <>
-                {item?.product_name} <br />
-              </>
-            ))}
+          <td className={tdStyles}>
+            <ol className="ml-3 list-decimal">
+              {data.map((item, i) => (
+                <li key={i}>
+                  {item?.product_name} - {item?.quantity} pcs.
+                </li>
+              ))}
+            </ol>
           </td>
         );
       } else if (typeof data === "object") {
+        // check if object
         return (
-          <td>
+          <td className={tdStyles}>
             {" "}
             <button>Show more</button>
           </td>
         );
       }
-
-      return <td>{data}</td>;
+      // in other cases data are primitives string or number
+      return <td className={tdStyles}>{data}</td>;
     });
 
     return <tr>{row}</tr>;
   });
 
   return (
-    <table>
+    <table className="table-auto border-collapse border border-slate-500">
       <thead>
         <tr>{columns}</tr>
       </thead>
