@@ -1,4 +1,4 @@
-import { TableData } from "./TableTempalte";
+import { TableData } from "../../components/Tables/TableTempalte";
 
 const tableFilter = (data: TableData, filter: string): TableData => {
   const filteredRow = data.rowsData.filter((row) => {

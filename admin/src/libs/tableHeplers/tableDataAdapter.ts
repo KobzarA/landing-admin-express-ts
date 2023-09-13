@@ -1,4 +1,4 @@
-import { TableData } from "../components/Tables/TableTempalte";
+import { TableData } from "../../components/Tables/TableTempalte";
 
 interface Order {
   [s: string]: string | number;
