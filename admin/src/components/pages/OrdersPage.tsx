@@ -24,7 +24,7 @@
 
 import tableOrdersDataAdapter from "../../libs/tableHeplers/tableDataAdapter";
 import TableContainer from "../Tables/TableContainer";
-import TableTemplate from "../Tables/TableTempalte";
+// import TableTemplate from "../Tables/TableTempalte";
 
 const ordersJson = `
 [
@@ -836,7 +836,43 @@ const ordersJson = `
     ],
     "order_date": "2023-09-06",
     "order_status": "success"
+  },
+  
+  {
+    "order_id": "022",
+    "customer_name": "John Doe",
+    "products": [
+      {
+        "product_id": "1001",
+        "product_name": "Widget",
+        "quantity": 3,
+        "price": 10.99
+      },
+      {
+        "product_id": "1002",
+        "product_name": "Gadget",
+        "quantity": 2,
+        "price": 19.99
+      }
+    ],
+    "order_date": "2023-09-07",
+    "order_status": "canceled"
+  },
+  {
+    "order_id": "033",
+    "customer_name": "Jane Smith",
+    "products": [
+      {
+        "product_id": "1003",
+        "product_name": "Thingamajig",
+        "quantity": 5,
+        "price": 7.49
+      }
+    ],
+    "order_date": "2023-09-06",
+    "order_status": "success"
   }
+
 ]
 `;
 
