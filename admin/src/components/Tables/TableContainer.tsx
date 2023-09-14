@@ -2,7 +2,7 @@ import { /* useEffect,*/ useEffect, useState } from "react";
 import TableTemplate, { TableData } from "./TableTempalte";
 import TableSearch from "./TableSearch";
 import TablePagination from "./TablePagination";
-// import TableFilters from "./TableFilters";
+import TableFilters from "./TableFilters";
 import tableFilter from "../../libs/tableHeplers/tableFilter";
 import { SortOrder } from "./TableSort";
 import tableSort from "../../libs/tableHeplers/tableSort";
@@ -45,15 +45,27 @@ const TableContainer = ({ data }: { data: TableData }) => {
   };
 
   const handleSearchText = (searchText: string) => {
-    if (searchText === "" || searchText === null) setViewData(data);
-    console.info("Render handle Search text");
-    setViewData(tableFilter(data, searchText));
+    if (searchText === "" || searchText === null) {
+      setViewData(data);
+    } else {
+      console.info("Render handle Search text");
+      setViewData(tableFilter(viewData, searchText));
+    }
+  };
+
+  const handleFilter = (searchText: string) => {
+    if (searchText === "" || searchText === null) {
+      setViewData(data);
+    } else {
+      console.info("Render handle Search text");
+      setViewData(tableFilter(viewData, searchText));
+    }
   };
 
   const handleSort = (i: number, order: SortOrder) => {
     if (order === "") return;
     console.info("Render handle sort");
-    setViewData(tableSort(data, i, order));
+    setViewData(tableSort(viewData, i, order));
   };
 
   useEffect(() => {
@@ -64,8 +76,12 @@ const TableContainer = ({ data }: { data: TableData }) => {
   return (
     <div>
       <TableSearch onSearch={handleSearchText} />
-      {/* <TableFilters onSearch={handleSearchText} /> */}
-      <TableTemplate data={currentPageData} tableSort={handleSort} />
+      <TableFilters onSearch={handleFilter} />
+      <TableTemplate
+        data={currentPageData}
+        tableSort={handleSort}
+        options={{ sortable: true }}
+      />
       <TablePagination
         onChangeItemsPerPage={setItemsPerPage}
         maxPage={getMaxPage()}
