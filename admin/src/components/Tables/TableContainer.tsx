@@ -1,4 +1,4 @@
-import { /* useEffect,*/ useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TableTemplate, { TableData } from "./TableTempalte";
 import TableSearch from "./TableSearch";
 import TablePagination from "./TablePagination";
@@ -6,20 +6,25 @@ import TableFilters from "./TableFilters";
 import tableFilter from "../../libs/tableHeplers/tableFilter";
 import { SortOrder } from "./TableSort";
 import tableSort from "../../libs/tableHeplers/tableSort";
+import debounce from "../../libs/debounce";
 
 /**
  * TODO
- * 1. Filter buttons and reset button
+ *+ 1. Filter buttons -  TODO refactor need [button_names, button_value]
  * 2. Choose which columns to show
  * 3. Pagination - Done
  * 4. Make table editable
  * 5. create real table template where dev can choose which features he needs, how to display data, modify rows
+ * 6. All states in container
+ * 7. reset button
  */
 
 const TableContainer = ({ data }: { data: TableData }) => {
+  console.count("Table Container");
+
   const [viewData, setViewData] = useState(data);
 
-  //Pagination
+  // Pagination
   const [currentPageData, setCurrentPageData] = useState<TableData>({
     columnsNames: [],
     rowsData: [],
@@ -27,60 +32,104 @@ const TableContainer = ({ data }: { data: TableData }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const getCurrentPageData = () => {
-    let firstItem = (currentPage - 1) * itemsPerPage;
-    let lastItem = firstItem + itemsPerPage;
-    const currentPageRowsData = viewData.rowsData.slice(firstItem, lastItem);
-
-    const currentPageData: TableData = {
-      columnsNames: data.columnsNames,
-      rowsData: currentPageRowsData,
-    };
-
-    setCurrentPageData(currentPageData);
-  };
-
   const getMaxPage = () => {
     return Math.ceil(viewData.rowsData.length / itemsPerPage);
   };
 
-  const handleSearchText = (searchText: string) => {
-    if (searchText === "" || searchText === null) {
-      setViewData(data);
+  const getCurrentPageData = useCallback(
+    (viewData: TableData) => {
+      let firstItem = (currentPage - 1) * itemsPerPage;
+      let lastItem = firstItem + itemsPerPage;
+      const currentPageRowsData = viewData.rowsData.slice(firstItem, lastItem);
+
+      const newPageData: TableData = {
+        columnsNames: viewData.columnsNames,
+        rowsData: currentPageRowsData,
+      };
+
+      return newPageData;
+    },
+    [itemsPerPage, currentPage],
+  );
+  //
+  // Search
+  //
+
+  const [searchText, setSearchText] = useState<string>("");
+
+  const debouncedSetSearchText = debounce(setSearchText, 300);
+  const handleSearchText = (searchText: string, data: TableData) => {
+    if (searchText === "" || searchText === undefined) {
+      return data;
     } else {
-      console.info("Render handle Search text");
-      setViewData(tableFilter(viewData, searchText));
+      // console.count("Render handle Search text");
+      return tableFilter(data, searchText);
     }
   };
 
-  const handleFilter = (searchText: string) => {
+  //
+  // Filter - at this time only one active filter
+  //
+
+  const [filterText, setFilterText] = useState("");
+
+  const handleFilter = (searchText: string, data: TableData) => {
     if (searchText === "" || searchText === null) {
-      setViewData(data);
+      return data;
     } else {
-      console.info("Render handle Search text");
-      setViewData(tableFilter(viewData, searchText));
+      // console.count("Render handle Search text");
+      return tableFilter(data, searchText);
     }
   };
 
-  const handleSort = (i: number, order: SortOrder) => {
-    if (order === "") return;
-    console.info("Render handle sort");
-    setViewData(tableSort(viewData, i, order));
+  //
+  // Sort
+  //
+
+  const [sortIndex, setSortIndex] = useState(0);
+  const [order, setOrder] = useState<SortOrder>("");
+
+  const handleSort = (i: number, order: SortOrder, data: TableData) => {
+    if (order === "") return data;
+    // console.count("Render handle sort");
+    return tableSort(data, i, order);
   };
 
+  // Changing view data if changed filter or search or data
+  //
+  // Changing Page data if changed filter or search or data
   useEffect(() => {
-    getCurrentPageData();
+    const newViewData = handleSort(
+      sortIndex,
+      order,
+      handleSearchText(searchText, handleFilter(filterText, data)),
+    );
+
+    const newCurrentPageData = getCurrentPageData(newViewData);
     console.log("updated current page data");
-  }, [itemsPerPage, currentPage, viewData]);
+    setViewData(newViewData);
+    setCurrentPageData(newCurrentPageData);
+  }, [
+    sortIndex,
+    order,
+    searchText,
+    filterText,
+    data,
+    itemsPerPage,
+    currentPage,
+    getCurrentPageData,
+  ]);
 
   return (
     <div>
-      <TableSearch onSearch={handleSearchText} />
-      <TableFilters onSearch={handleFilter} />
+      <TableSearch debouncedSetSearchText={debouncedSetSearchText} />
+      <TableFilters filterText={filterText} setFilterText={setFilterText} />
       <TableTemplate
         data={currentPageData}
-        tableSort={handleSort}
-        options={{ sortable: true }}
+        options={{
+          sortable: true,
+          sortProps: { setOrder: setOrder, setSortIndex: setSortIndex },
+        }}
       />
       <TablePagination
         onChangeItemsPerPage={setItemsPerPage}

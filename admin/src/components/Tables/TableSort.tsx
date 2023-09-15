@@ -1,24 +1,18 @@
-/***
- * This elememts could be several in table
- * it should check type of data
- * shown as arrow up or down on <th>
- *  have a state asc dcs
- * should change viewData with setViewData, also should read viewData
- * know in which row it is it
- * sort row data by own index in needed order
- * useEffect to update global state
- */
-
-import { useEffect, useState } from "react";
+import { useEffect, useState, Dispatch, SetStateAction } from "react";
 
 export type SortOrder = "asc" | "dsc" | "";
+
+interface TableSortProps {
+  i: number;
+  // tableSort: (i: number, order: "asc" | "dsc" | "") => void;
+  setSortIndex: Dispatch<SetStateAction<number>>;
+  setOrder: Dispatch<SetStateAction<SortOrder>>;
+}
 const TableSort = ({
   i,
-  tableSort,
-}: {
-  i: number;
-  tableSort: (i: number, order: SortOrder) => void;
-}) => {
+  setOrder: setOrderContainer,
+  setSortIndex, // tableSort,
+}: TableSortProps) => {
   const [order, setOrder] = useState<SortOrder>("");
 
   const onSort = () => {
@@ -27,8 +21,9 @@ const TableSort = ({
   };
 
   useEffect(() => {
-    tableSort(i, order);
-  }, [order]);
+    setOrderContainer(order);
+    setSortIndex(i);
+  }, [order, i, setOrderContainer, setSortIndex]);
 
   return (
     <span onClick={onSort} className="pl-4">

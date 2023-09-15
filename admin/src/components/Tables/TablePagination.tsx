@@ -1,16 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 
+interface TablePaginationProps {
+  onChangeItemsPerPage: Dispatch<SetStateAction<number>>;
+  maxPage: number;
+  onChangePage: Dispatch<SetStateAction<number>>;
+  currentPage: number;
+}
+
 const TablePagination = ({
   onChangeItemsPerPage,
   maxPage,
   onChangePage,
   currentPage,
-}: {
-  onChangeItemsPerPage: Dispatch<SetStateAction<number>>;
-  maxPage: number;
-  onChangePage: Dispatch<SetStateAction<number>>;
-  currentPage: number;
-}) => {
+}: TablePaginationProps) => {
   console.log("render Pagination");
 
   const pagesList = () => {
