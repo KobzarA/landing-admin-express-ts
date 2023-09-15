@@ -1,8 +1,13 @@
 import { SortOrder } from "../../components/Tables/TableSort";
 import { TableData } from "../../components/Tables/TableTempalte";
 
+/**
+ * TODO Sort Dates
+ */
+
 const tableSort = (data: TableData, i: number, order: SortOrder): TableData => {
   const { columnsNames } = data;
+  if (!data.rowsData.length) return data;
 
   switch (typeof data.rowsData[0][i]) {
     case "object":

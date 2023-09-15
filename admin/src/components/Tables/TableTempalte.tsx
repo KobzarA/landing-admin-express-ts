@@ -1,4 +1,5 @@
-import TableSort from "./TableSort";
+import { Dispatch, SetStateAction } from "react";
+import TableSort, { SortOrder } from "./TableSort";
 
 export interface TableData {
   columnsNames: (string | number)[];
@@ -7,33 +8,39 @@ export interface TableData {
 
 export interface TableTemplateProps {
   data: TableData;
-  tableSort: (i: number, order: "asc" | "dsc" | "") => void;
+
   options?: {
     sortable?: boolean;
     editable?: boolean;
     selectColumn?: boolean;
+    sortProps?: {
+      setSortIndex: Dispatch<SetStateAction<number>>;
+      setOrder: Dispatch<SetStateAction<SortOrder>>;
+    };
   };
 }
 
-const TableTemplate = ({ data, tableSort, options }: TableTemplateProps) => {
+const TableTemplate = ({ data, options }: TableTemplateProps) => {
   // Check for incoming data
   if (data.columnsNames.length === 0) return <div>"No data is downloaded"</div>;
 
   console.log("Render Table Template");
-
   const { columnsNames, rowsData } = data;
   //
   //checking for options
   //
   const sorterElement = (i: number) => {
+    if (!options?.sortable || !options.sortProps) return null;
     //Checking if there data rowsData & and conditional render of sort comp
-    const elem = rowsData.length ? (
-      typeof rowsData[0][i] !== "object" ? (
-        <TableSort i={i} tableSort={tableSort} />
-      ) : null
-    ) : null;
+    if (!rowsData.length || typeof rowsData[0][i] === "object") return null;
 
-    return elem;
+    return (
+      <TableSort
+        i={i}
+        setOrder={options.sortProps.setOrder}
+        setSortIndex={options.sortProps.setSortIndex}
+      />
+    );
   };
 
   //
@@ -44,7 +51,7 @@ const TableTemplate = ({ data, tableSort, options }: TableTemplateProps) => {
       <th key={i} className=" border border-slate-600">
         <div className="mx-1 flex min-w-fit justify-between p-3">
           {item}
-          {options?.sortable ? sorterElement(i) : null}
+          {sorterElement(i)}
         </div>
       </th>
     );

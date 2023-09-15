@@ -1,10 +1,15 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
-const TableSearch = ({ onSearch }: { onSearch: (search: string) => void }) => {
-  const [searchText, setSearchText] = useState("");
+interface TableSearchProps {
+  debouncedSetSearchText: Dispatch<SetStateAction<string>>;
+}
+
+const TableSearch = ({ debouncedSetSearchText }: TableSearchProps) => {
+  const [input, setInput] = useState("");
+
   useEffect(() => {
-    onSearch(searchText);
-  }, [searchText]);
+    debouncedSetSearchText(input);
+  }, [input, debouncedSetSearchText]);
   return (
     <>
       <label className="mt-5 block" htmlFor="tableSearch">
@@ -14,10 +19,11 @@ const TableSearch = ({ onSearch }: { onSearch: (search: string) => void }) => {
         type="search"
         name="tableSearch"
         id="tableSearch"
-        className="my-2 block rounded-xl bg-zinc-400 p-1 text-white"
-        value={searchText}
+        placeholder="Search ..."
+        className="my-2 block rounded-xl bg-zinc-400 p-1 px-2 text-white placeholder:text-zinc-800"
+        value={input}
         onChange={(e) => {
-          setSearchText(e.target.value);
+          setInput(e.target.value);
         }}
       />
     </>
