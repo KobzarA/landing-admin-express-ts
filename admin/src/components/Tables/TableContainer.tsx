@@ -3,6 +3,7 @@ import TableTemplate, { TableData } from "./TableTempalte";
 import TableSearch from "./TableSearch";
 import TablePagination from "./TablePagination";
 import TableFilters from "./TableFilters";
+import TableSelectDataToShow from "./TableSelectDataToShow";
 import tableFilter from "../../libs/tableHeplers/tableFilter";
 import { SortOrder } from "./TableSort";
 import tableSort from "../../libs/tableHeplers/tableSort";
@@ -18,6 +19,10 @@ import debounce from "../../libs/debounce";
  * 6. All states in container
  * 7. reset button
  */
+
+export interface ihandleSelect {
+  (select: (string | number)[] | undefined, data: TableData): TableData;
+}
 
 const TableContainer = ({ data }: { data: TableData }) => {
   console.count("Table Container");
@@ -57,7 +62,7 @@ const TableContainer = ({ data }: { data: TableData }) => {
 
   const [searchText, setSearchText] = useState<string>("");
 
-  const debouncedSetSearchText = debounce(setSearchText, 300);
+  const debouncedSetSearchText = debounce(setSearchText, 500);
   const handleSearchText = (searchText: string, data: TableData) => {
     if (searchText === "" || searchText === undefined) {
       return data;
@@ -95,6 +100,33 @@ const TableContainer = ({ data }: { data: TableData }) => {
     return tableSort(data, i, order);
   };
 
+  //
+  // Handle select
+  //
+
+  const [activeCheckBoxes, setActiveCheckBoxes] =
+    useState<(string | number)[]>();
+
+  const debouncedSetActiveCheckBoxes = debounce(setActiveCheckBoxes, 500);
+  const handleSelect: ihandleSelect = (select, data) => {
+    if (!select) return data;
+
+    // filter columnName
+
+    const newColumnNames = data.columnsNames.filter((columnName) =>
+      select.includes(columnName),
+    );
+    const indexesToShow = newColumnNames.map((columnName) => {
+      return data.columnsNames.indexOf(columnName);
+    });
+    debugger;
+    const newRowsData = data.rowsData.map((row) =>
+      row.filter((tableCell, i) => indexesToShow.includes(i)),
+    );
+
+    return { columnsNames: newColumnNames, rowsData: newRowsData };
+  };
+
   // Changing view data if changed filter or search or data
   //
   // Changing Page data if changed filter or search or data
@@ -102,7 +134,10 @@ const TableContainer = ({ data }: { data: TableData }) => {
     const newViewData = handleSort(
       sortIndex,
       order,
-      handleSearchText(searchText, handleFilter(filterText, data)),
+      handleSearchText(
+        searchText,
+        handleFilter(filterText, handleSelect(activeCheckBoxes, data)),
+      ),
     );
 
     const newCurrentPageData = getCurrentPageData(newViewData);
@@ -117,6 +152,7 @@ const TableContainer = ({ data }: { data: TableData }) => {
     data,
     itemsPerPage,
     currentPage,
+    activeCheckBoxes,
     getCurrentPageData,
   ]);
 
@@ -124,6 +160,11 @@ const TableContainer = ({ data }: { data: TableData }) => {
     <div>
       <TableSearch debouncedSetSearchText={debouncedSetSearchText} />
       <TableFilters filterText={filterText} setFilterText={setFilterText} />
+      <TableSelectDataToShow
+        data={data}
+        setActiveCheckBoxes={debouncedSetActiveCheckBoxes}
+        options={{ changeData: "onchange", dataToChoose: "columns" }}
+      />
       <TableTemplate
         data={currentPageData}
         options={{
