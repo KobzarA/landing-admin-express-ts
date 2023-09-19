@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import TableTemplate, { TableData } from "./TableTempalte";
 import TableSearch from "./TableSearch";
 import TablePagination from "./TablePagination";
@@ -8,6 +8,8 @@ import tableFilter from "../../libs/tableHeplers/tableFilter";
 import { SortOrder } from "./TableSort";
 import tableSort from "../../libs/tableHeplers/tableSort";
 import debounce from "../../libs/debounce";
+import ModalTemplate from "../Modal/ModalTemplate";
+import TableChangeRowData from "./TableChangeRowData";
 
 /**
  * TODO
@@ -20,6 +22,38 @@ import debounce from "../../libs/debounce";
  * 7. reset button
  */
 
+// Edit modal anotations
+export enum ModalChangeKind {
+  DISABLED = "DISABLED",
+  SUCCESS = "SUCCESS",
+  ERROR = "ERROR",
+  SHOW_EDIT_FORM = "SHOW_EDIT_FORM",
+  SENDING = "SENDING",
+}
+
+interface ModalChangeState {
+  status: ModalChangeKind;
+  data: {
+    tableData?: {
+      headers: (string | number)[];
+      row: (string | number | object | [])[];
+    };
+  } | null;
+  message: string | null;
+}
+
+export interface ModalChangeAction {
+  type: ModalChangeKind;
+  payload: {
+    tableData?: {
+      headers: (string | number)[];
+      row: (string | number | object | [])[];
+    };
+    message?: string;
+  } | null;
+}
+
+// Select anotation
 export interface ihandleSelect {
   (select: (string | number)[] | undefined, data: TableData): TableData;
 }
@@ -127,6 +161,75 @@ const TableContainer = ({ data }: { data: TableData }) => {
     return { columnsNames: newColumnNames, rowsData: newRowsData };
   };
 
+  //
+  // Edit table
+  //
+
+  //Reducer
+
+  const reducerModalChange = (
+    state: ModalChangeState,
+    action: ModalChangeAction,
+  ) => {
+    const { type, payload } = action;
+    switch (type) {
+      case ModalChangeKind.DISABLED:
+        return { ...state, status: ModalChangeKind.DISABLED };
+      case ModalChangeKind.SUCCESS:
+        return { ...state, status: ModalChangeKind.SUCCESS };
+      case ModalChangeKind.ERROR:
+        return { ...state, status: ModalChangeKind.ERROR };
+      case ModalChangeKind.SHOW_EDIT_FORM:
+        return {
+          ...state,
+          status: ModalChangeKind.SHOW_EDIT_FORM,
+          data: payload,
+        };
+      case ModalChangeKind.SENDING:
+        return { ...state, status: ModalChangeKind.SENDING };
+      default:
+        throw new Error("Unknown action");
+    }
+  };
+
+  //Complex state made by useReducer
+  const [modalChange, dispatchModalChange] = useReducer(reducerModalChange, {
+    status: ModalChangeKind.DISABLED,
+    data: null,
+    message: null,
+  });
+
+  // Conditional render of modal
+  const modal = () => {
+    const modalProps = {
+      closeModal: () =>
+        dispatchModalChange({
+          type: ModalChangeKind.DISABLED,
+          payload: null,
+        }),
+      timeout: 3000,
+    };
+    switch (modalChange.status) {
+      case ModalChangeKind.DISABLED:
+        return null;
+      case ModalChangeKind.SHOW_EDIT_FORM:
+        return (
+          <ModalTemplate {...modalProps} timeout={0}>
+            <TableChangeRowData
+              tableData={modalChange.data?.tableData!}
+              sendData={console.log}
+            />
+          </ModalTemplate>
+        );
+      case ModalChangeKind.SUCCESS:
+        return <ModalTemplate {...modalProps} />;
+      case ModalChangeKind.ERROR:
+        return <ModalTemplate {...modalProps} />;
+      case ModalChangeKind.SENDING:
+        return <ModalTemplate {...modalProps} />;
+    }
+  };
+
   // Changing view data if changed filter or search or data
   //
   // Changing Page data if changed filter or search or data
@@ -170,6 +273,10 @@ const TableContainer = ({ data }: { data: TableData }) => {
         options={{
           sortable: true,
           sortProps: { setOrder: setOrder, setSortIndex: setSortIndex },
+          editable: true,
+          editableProps: {
+            dispatchModalChange: dispatchModalChange,
+          },
         }}
       />
       <TablePagination
@@ -178,6 +285,7 @@ const TableContainer = ({ data }: { data: TableData }) => {
         onChangePage={setCurrentPage}
         currentPage={currentPage}
       />
+      {modal()}
     </div>
   );
 };
