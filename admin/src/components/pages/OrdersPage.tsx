@@ -1,11 +1,11 @@
 /*
     TODO:
-    1.Table for all orders. <TableTemplate> maybe
+    + 1.Table for all orders. <TableTemplate> maybe
     2.Change status abitity. Status enum.
     3.OrderPage.
-    4.Filtering orders by ... status
-    5.Sorting orders by each column - Done
-    6.Pagination with load more
+    + 4.Filtering orders by ... status 
+    + 5.Sorting orders by each column - Done
+    +- 6.Pagination with load more
     7.Some additional status to order like important or immediate
 
     SO there will be at least 4 components
