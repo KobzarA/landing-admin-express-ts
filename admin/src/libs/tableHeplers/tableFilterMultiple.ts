@@ -2,6 +2,7 @@ import { TableData } from "../../components/Tables/TableTempalte";
 
 const tableFilter = (data: TableData, filter: string): TableData => {
   const filteredRow = data.rowsData.filter((row) => {
+    ;
     return row.find((elem) => {
       if (typeof elem === "object" && !Array.isArray(elem)) {
         // Not implemented
