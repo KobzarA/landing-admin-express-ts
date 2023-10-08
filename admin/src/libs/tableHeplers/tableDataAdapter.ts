@@ -3,7 +3,7 @@ import { TableData } from "../../components/Tables/TableTempalte";
 interface Order {
   [s: string]: string | number;
 }
-type OrdersData = Order[];
+export type OrdersData = Order[];
 
 const tableOrdersDataAdapter = (data: OrdersData): TableData | never => {
   if (!data) throw new Error("No data");

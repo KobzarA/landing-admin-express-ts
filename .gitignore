@@ -128,3 +128,8 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# builded static folder as they will changed  to often while develop
+public
+
+*.pem
