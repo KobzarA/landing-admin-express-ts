@@ -20,11 +20,12 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && pnpm cp_l",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cp_w": "xcopy /s /e /y build\\* ..\\server\\public\\admin",
-    "cp_l": "cp -r build/* ../server/public/admin"
+    "cp": "cross-env OS_TYPE=%PROCESSOR_ARCHITECTURE% && (echo %OS_TYPE% | findstr /c:\"x86\" >nul && xcopy /s /e /y build\\* ..\\server\\public\\admin || cp -r build/* ../server/public/admin)",
+    "cp_w": "xcopy /s /e /y /I build\\* ..\\server\\public\\admin",
+    "cp_l": "mkdir -p ../server/public/admin && cp -r build/* ../server/public/admin"
   },
   "eslintConfig": {
     "extends": [
@@ -46,6 +47,7 @@
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.17.0",
+    "cross-env": "^7.0.3",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.4",
     "tailwindcss": "^3.3.3"
