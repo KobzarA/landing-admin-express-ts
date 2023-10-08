@@ -22,8 +22,12 @@
     NB! Comments to order like a reminder
 */
 
-import tableOrdersDataAdapter from "../../libs/tableHeplers/tableDataAdapter";
+import { useEffect, useState } from "react";
+import tableOrdersDataAdapter, {
+  OrdersData,
+} from "../../libs/tableHeplers/tableDataAdapter";
 import TableContainer from "../Tables/TableContainer";
+import axios from "axios";
 // import TableTemplate from "../Tables/TableTempalte";
 
 const ordersJson = `
@@ -881,6 +885,28 @@ const orders = JSON.parse(ordersJson);
 const OrdersPage = () => {
   const tableData = tableOrdersDataAdapter(orders);
 
+  const [fetchedData, setFetchedData] = useState<OrdersData>([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await (
+          await axios.get<OrdersData>("https://localhost:8000/v1/orders/", {
+            withCredentials: true,
+          })
+        ).data;
+
+        setFetchedData(data);
+      } catch (error) {
+        throw error;
+      }
+    };
+    getData();
+  }, []);
+
+  const tableData2 =
+    fetchedData.length !== 0 ? tableOrdersDataAdapter(fetchedData) : null;
+
   return (
     <>
       My greeting to Order page of admin service
@@ -888,6 +914,8 @@ const OrdersPage = () => {
       {/* <TableTemplate data={tableData} /> */}
       <h2>Second experimental table</h2>
       <TableContainer data={tableData} />
+      <h2>Data from express server</h2>
+      {tableData2 ? <TableContainer data={tableData2} /> : null}
     </>
   );
 };

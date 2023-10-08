@@ -6,7 +6,7 @@ Admin
 4. Edit Table Data. +
 5. Choose which column show by form which show tree of data or columnNames. -+
 6. Multifilter component
-7. Login, and controll user
+7. Login +++, and controll user
 8. Add items, delete
 9. send emails
 10. connect to instagram.
@@ -15,10 +15,11 @@ Admin
 13. livechat
 14. think about reuseability of code. How should I work with objects and arrays,
     use Generics for decribing unknown data.
+15. ADD State Manager - Redux?
 
 Server-Lending accumlate
 
-1. Auth JWT
+1. Auth JWT+
 2. Work with orders info:
    - db for each lending, so it should be template with crud
    - data validation can be only on front end or not if I will improve
