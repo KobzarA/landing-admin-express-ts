@@ -1,0 +1,15 @@
+{
+  "name": "landing-admin-front-back",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install-all": "pnpm recursive install",
+    "build-all": "pnpm recursive run build",
+    "start": "node server/dist/bin/start.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
