@@ -16,6 +16,9 @@ Admin
 14. think about reuseability of code. How should I work with objects and arrays,
     use Generics for decribing unknown data.
 15. ADD State Manager - Redux?
+16. multiple buskets for different clients order creating(if needed)
+17. create order page with search autocompliting for products, after adding it
+    should show price and stock, restrict ability to choose more than on stock
 
 Server-Lending accumlate
 
