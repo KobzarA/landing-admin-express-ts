@@ -13,8 +13,6 @@ const TablePagination = ({
   onChangePage,
   currentPage,
 }: TablePaginationProps) => {
-  console.log("render Pagination");
-
   const pagesList = () => {
     let linkList = [];
     for (let i = 1; i <= maxPage; i++) {
