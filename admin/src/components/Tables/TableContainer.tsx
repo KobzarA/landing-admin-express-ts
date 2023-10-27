@@ -59,8 +59,6 @@ export interface ihandleSelect {
 }
 
 const TableContainer = ({ data }: { data: TableData }) => {
-  console.count("Table Container");
-
   const [viewData, setViewData] = useState(data);
 
   // Pagination
@@ -101,7 +99,6 @@ const TableContainer = ({ data }: { data: TableData }) => {
     if (searchText === "" || searchText === undefined) {
       return data;
     } else {
-      // console.count("Render handle Search text");
       return tableFilter(data, searchText);
     }
   };
@@ -116,7 +113,6 @@ const TableContainer = ({ data }: { data: TableData }) => {
     if (searchText === "" || searchText === null) {
       return data;
     } else {
-      // console.count("Render handle Search text");
       return tableFilter(data, searchText);
     }
   };
@@ -130,7 +126,6 @@ const TableContainer = ({ data }: { data: TableData }) => {
 
   const handleSort = (i: number, order: SortOrder, data: TableData) => {
     if (order === "") return data;
-    // console.count("Render handle sort");
     return tableSort(data, i, order);
   };
 
@@ -244,7 +239,6 @@ const TableContainer = ({ data }: { data: TableData }) => {
     );
 
     const newCurrentPageData = getCurrentPageData(newViewData);
-    console.log("updated current page data");
     setViewData(newViewData);
     setCurrentPageData(newCurrentPageData);
   }, [

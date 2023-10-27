@@ -5,7 +5,6 @@ const debounce = <F extends (...args: any[]) => void>(
 ) => {
   let timeoutId: NodeJS.Timeout | null;
   return (...args: Parameters<F>) => {
-    console.count("debounce");
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
