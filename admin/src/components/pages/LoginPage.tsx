@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Navigate } from "react-router-dom";
 import {
   Dispatch,
@@ -6,10 +6,13 @@ import {
   SetStateAction,
   useState,
   useEffect,
+  // useRef,
 } from "react";
 import { API_BASE } from "../../config";
 import { IUser } from "../App";
 import { checkAuth } from "../../libs/auth";
+import useAnimationOnRemove from "../../hooks/useAnimationOnRemove";
+import { IResponse } from "../../../../shared/src/types/api";
 
 const LoginPage = ({
   user,
@@ -20,32 +23,65 @@ const LoginPage = ({
 }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorDiv, closeErrorMessage] = useAnimationOnRemove();
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    const res = await axios.post(
-      `${API_BASE}admin/login/password`,
-      {
-        username,
-        password,
-      },
-      { withCredentials: true },
-    );
-    if (res.status === 200) {
-      setUser(res.data);
+    try {
+      const res = await axios.post<IResponse<IUser>>(
+        `${API_BASE}admin/login/password`,
+        {
+          username,
+          password,
+        },
+        { withCredentials: true },
+      );
+      if (res.data.success === true) {
+        setUser(res.data.data);
+      } else {
+        setErrorMessage(res.data.message);
+      }
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        setErrorMessage(error.response?.data.message);
+      }
     }
   };
 
+  // const closeErrorMessage = () => {
+  //   if (errorDiv.current) {
+  //     errorDiv.current.classList.remove("animate-fade-in");
+  //     errorDiv.current.classList.add("animate-fade-out");
+  //   }
+  //   const timer = setTimeout(() => {
+  //     setErrorMessage(null);
+  //     clearTimeout(timer);
+  //   }, 500);
+  // };
+
   useEffect(() => {
+    //use prefered theme
+
+    if (
+      localStorage.theme === "dark" ||
+      (!("theme" in localStorage) &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    //check auth on refresh
     checkAuth(setUser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className="m-6 flex min-h-screen flex-col justify-center space-y-10 rounded-2xl shadow-2xl md:m-0 md:flex-row  md:space-y-0">
       {user && <Navigate to=".." replace={true} />}
       {/* <!-- Content Container --> */}
-      <form className="p-6 md:p-10" onSubmit={onSubmit}>
+      <form className="p-6  md:p-10" onSubmit={onSubmit}>
         <h2 className="mb-5 font-mono text-4xl font-bold">Log in</h2>
         <p className="mb-12 max-w-sm font-sans font-light text-gray-600">
           Log in to your account to upload or download pictures, videos or
@@ -55,7 +91,13 @@ const LoginPage = ({
           type="text"
           name="username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            closeErrorMessage<string | null>({
+              setState: setErrorMessage,
+              newState: null,
+            });
+          }}
           placeholder="Enter your username"
           className="mb-6 w-full rounded-md  border border-gray-300 p-6 placeholder:font-sans placeholder:font-light "
         />
@@ -63,10 +105,27 @@ const LoginPage = ({
           type="password"
           name="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            closeErrorMessage<string | null>({
+              setState: setErrorMessage,
+              newState: null,
+            });
+          }}
           placeholder="Enter your password"
           className="mb-6 w-full rounded-md  border border-gray-300 p-6 placeholder:font-sans placeholder:font-light "
         />
+
+        {/* Error message  */}
+        {errorMessage ? (
+          <div
+            ref={errorDiv}
+            className="mx-auto mb-8 mt-2 w-fit animate-fade-in  rounded-md bg-red-300  px-5  py-2 text-center text-red-700"
+          >
+            {errorMessage}
+          </div>
+        ) : null}
+
         {/* <!-- Middle Contant --> */}
         <div className="flex flex-col items-center justify-between space-y-6 md:flex-row md:space-y-0">
           <button className="font-sans font-light text-cyan-200">
