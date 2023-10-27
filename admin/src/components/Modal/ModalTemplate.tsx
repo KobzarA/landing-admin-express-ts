@@ -22,6 +22,7 @@ const ModalTemplate = ({
       document.body.classList.remove("overflow-hidden");
       if (timeoutClose) clearTimeout(timeoutClose);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return createPortal(
     // modal overlay

@@ -9,7 +9,10 @@ import Layout from "./Layout";
 import MainPage from "./pages/MainPage";
 import OrdersPage from "./pages/OrdersPage";
 import LoginPage from "./pages/LoginPage";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import ProductsPage from "./pages/ProductsPage";
+import UsersPage from "./pages/UsersPage";
+import UsersCreatePage from "./pages/UsersCreatePage";
 
 export interface IUser {
   email: string;
@@ -32,6 +35,9 @@ function App() {
         <Route element={<Layout user={user} setUser={setUser} />}>
           <Route path="/" element={<MainPage />} />
           <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/users" element={<UsersPage />}></Route>
+          <Route path="/users/create" element={<UsersCreatePage />} />
         </Route>
       </Routes>
     </Router>
