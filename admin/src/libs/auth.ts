@@ -25,7 +25,6 @@ export const checkAuth = async (setUser: Function) => {
       },
     );
     if (checked.status === 403) return setUser(null);
-    console.log(checked);
     return setUser(checked.data);
   } catch (error) {
     setUser(null);

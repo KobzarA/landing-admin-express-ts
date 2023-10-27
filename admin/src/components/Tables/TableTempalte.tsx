@@ -28,7 +28,6 @@ const TableTemplate = ({ data, options }: TableTemplateProps) => {
   // Check for incoming data
   if (data.columnsNames.length === 0) return <div>"No data is downloaded"</div>;
 
-  console.log("Render Table Template");
   const { columnsNames, rowsData } = data;
 
   //

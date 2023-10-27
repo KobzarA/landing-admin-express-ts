@@ -28,7 +28,7 @@ import tableOrdersDataAdapter, {
 } from "../../libs/tableHeplers/tableDataAdapter";
 import TableContainer from "../Tables/TableContainer";
 import axios from "axios";
-// import TableTemplate from "../Tables/TableTempalte";
+import { API_BASE } from "../../config";
 
 const ordersJson = `
 [
@@ -891,7 +891,7 @@ const OrdersPage = () => {
     const getData = async () => {
       try {
         const data = await (
-          await axios.get<OrdersData>("https://localhost:8000/v1/orders/", {
+          await axios.get<OrdersData>(API_BASE + "orders/", {
             withCredentials: true,
           })
         ).data;
