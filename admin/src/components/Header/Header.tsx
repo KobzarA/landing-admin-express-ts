@@ -16,7 +16,7 @@ const Header = ({
   const navigate = useNavigate();
 
   return (
-    <header className="flex h-16 w-full items-center justify-around border-b border-b-zinc-400 p-4">
+    <header className="flex h-full  items-center justify-around border-b border-b-zinc-400 p-4">
       <p className="text-3xl text-violet-400 dark:text-white">
         Custom Admin Panel
       </p>
