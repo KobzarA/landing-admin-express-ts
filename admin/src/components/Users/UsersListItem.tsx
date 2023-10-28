@@ -1,4 +1,4 @@
-import { IUser } from "../App";
+import { IUser } from "../../../../shared/src/types/models";
 interface IUsersListItem {
   user: IUser;
   onDelete: Function;

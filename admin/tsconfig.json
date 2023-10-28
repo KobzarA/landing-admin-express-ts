@@ -1,5 +1,4 @@
 {
-  "extends": "../shared/tsconfig.json",
   "compilerOptions": {
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -17,5 +16,8 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src", "./jest-setup.ts"]
+  "include": ["src", "./jest-setup.ts"],
+  "paths": {
+    "@shared/*": ["../shared/*"]
+  }
 }

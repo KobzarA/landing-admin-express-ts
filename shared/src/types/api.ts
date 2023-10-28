@@ -1,13 +1,11 @@
-type ResolvedRequest<T> = {
+export type ResolvedRequest<T> = {
   success: true;
   data: T;
 };
 
-type RejectedRequest = {
+export type RejectedRequest = {
   success: false;
   message: string;
 };
 
-type IResponse<T> = ResolvedRequest<T> | RejectedRequest;
-
-export type { IResponse };
+export type IResponse<T> = ResolvedRequest<T> | RejectedRequest;

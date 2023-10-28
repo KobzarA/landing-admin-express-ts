@@ -1,11 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE } from "../config";
-import { IUser } from "../components/App";
+import { IUser, IUserWithPassword } from "../../../shared/src/types/models";
 import { IResponse } from "../../../shared/src/types/api";
-
-interface IUserWithPassword extends IUser {
-  password: string;
-}
 
 export const usersApi = createApi({
   reducerPath: "usersApi",

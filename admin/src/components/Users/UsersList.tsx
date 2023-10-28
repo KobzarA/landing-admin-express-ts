@@ -1,4 +1,4 @@
-import { IUser } from "../App";
+import { IUser } from "../../../../shared/src/types/models";
 import UsersListItem from "./UsersListItem";
 import useModal from "../../hooks/useModal";
 import { useState } from "react";
