@@ -4,11 +4,12 @@ interface IhandleAnimation<T> {
   setState: Dispatch<SetStateAction<T>>;
   newState: T;
 }
-
-const useAnimationOnRemove = (): [
+type RTuseAnimationOnRemove = [
   React.MutableRefObject<HTMLDivElement | null>,
   <T>({ setState, newState }: IhandleAnimation<T>) => void,
-] => {
+];
+
+const useAnimationOnRemove = (): RTuseAnimationOnRemove => {
   const ref = useRef<null | HTMLDivElement>(null);
 
   const handleAnimationBeforeStateChange = <T>({

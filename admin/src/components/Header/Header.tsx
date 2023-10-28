@@ -1,19 +1,22 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import SwitcherTheme from "./SwitcherTheme";
-import { IUser } from "../App";
-import { logout } from "../../libs/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchLogOut } from "../../api/authSlice";
+import { AppDispatch, RootState } from "../../store";
 
-const Header = ({
-  user,
-  setUser,
-}: {
-  user: IUser | null;
-  setUser: Dispatch<SetStateAction<null | IUser>>;
-}) => {
+const Header = () => {
   const [userControl, setUserContol] = useState(false);
-
+  const user = useSelector((state: RootState) => state.auth.user);
   const navigate = useNavigate();
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const logout = () => {
+    dispatch(fetchLogOut());
+
+    navigate("/login");
+  };
 
   return (
     <header className="flex h-full  items-center justify-around border-b border-b-zinc-400 p-4">
@@ -23,7 +26,7 @@ const Header = ({
       {/* User info */}
       <div className="relative flex h-full flex-row items-center p-4 ">
         <button
-          className="flex items-center justify-between space-x-2"
+          className="flex items-center justify-between space-x-2  hover:text-cyan-300"
           onClick={() => {
             setUserContol(!userControl);
           }}
@@ -47,7 +50,7 @@ const Header = ({
         <div
           className={`absolute left-0 top-12 ${
             userControl ? null : "hidden"
-          } min-h-16 rounded-lg bg-zinc-300 p-6`}
+          } min-h-16 w-96 rounded-lg bg-zinc-300 p-6`}
         >
           <div className="flex flex-col items-center justify-between">
             <div>
@@ -55,10 +58,9 @@ const Header = ({
               Role - {user?.role}
             </div>
             <button
-              className="block rounded-sm"
+              className="mt-3 block  rounded-xl border p-2 text-base hover:text-cyan-300 dark:border-slate-500"
               onClick={() => {
-                logout(setUser);
-                navigate("/login");
+                logout();
               }}
             >
               Logout
