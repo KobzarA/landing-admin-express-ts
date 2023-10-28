@@ -1,4 +1,4 @@
-import { IUser } from "../App";
+import { IUser } from "../../../../shared/src/types/models";
 import { useUpdateUserMutation } from "../../api/usersApi";
 import { useState } from "react";
 
