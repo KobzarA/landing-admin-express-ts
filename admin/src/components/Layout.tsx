@@ -1,22 +1,12 @@
-import { Dispatch, SetStateAction } from "react";
-
 import Header from "./Header/Header";
 import Aside from "./Aside";
 import { Outlet } from "react-router-dom";
-import { IUser } from "./App";
 
-// const Layout = ({ children }: { children: ReactElement | ReactElement[] }) => {
-const Layout = ({
-  user,
-  setUser,
-}: {
-  user: IUser | null;
-  setUser: Dispatch<SetStateAction<null | IUser>>;
-}) => {
+const Layout = () => {
   return (
-    <div className="grid-cols-main-layout grid-rows-main-layout grid">
+    <div className="grid grid-cols-main-layout grid-rows-main-layout">
       <Aside />
-      <Header user={user} setUser={setUser} />
+      <Header />
       <main className="p-4">
         <Outlet />
       </main>
