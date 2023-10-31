@@ -18,7 +18,13 @@ const VerifyUser = () => {
     let timer: NodeJS.Timeout;
     if (user) {
       timer = setTimeout(() => {
-        navigator(-1);
+        if (process.env.NODE_ENV === "development") {
+          // for dev
+          navigator("/");
+        } else if (process.env.NODE_ENV === "production") {
+          // for productiont
+          navigator(-1);
+        }
       }, 700);
     }
     return () => {
