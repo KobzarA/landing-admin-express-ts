@@ -1,5 +1,6 @@
 import UserCreateForm from "../Users/UserCreateForm";
 import { Link } from "react-router-dom";
+import UserCreateForm2 from "../Users/UserCreateForm2";
 
 const UsersCreatePage = () => {
   return (
@@ -24,6 +25,7 @@ const UsersCreatePage = () => {
       </div>
       <div className=" mx-auto max-w-xl">
         <UserCreateForm />
+        <UserCreateForm2 />
       </div>
     </>
   );
