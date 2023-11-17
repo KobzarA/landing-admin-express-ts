@@ -8,7 +8,6 @@ const UsersPage = () => {
 
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error</div>;
-  console.log(data);
   if (!data?.success) return <div>Error</div>;
   return (
     <div>

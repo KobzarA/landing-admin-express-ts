@@ -5,6 +5,7 @@ import { useState } from "react";
 import UserEditForm from "./UserEditForm";
 import { DeleteAction } from "../Modal/ModalMessages";
 import { useDeleteUserMutation } from "../../api/usersApi";
+import UserEditForm2 from "./UserEditForm2";
 
 enum ModalInfo {
   "EDIT" = "EDIT",
@@ -53,7 +54,8 @@ const UsersList = ({ users }: { users: IUser[] }) => {
         if (!userMutate) return null;
         return (
           <ModalTemplate closeModal={closeModal}>
-            <UserEditForm user={userMutate} />
+            {/* <UserEditForm user={userMutate} /> */}
+            <UserEditForm2 user={userMutate} />
           </ModalTemplate>
         );
       case ModalInfo.EDITED:
