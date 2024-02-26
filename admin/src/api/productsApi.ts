@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { API_BASE } from "../config";
-import { IProduct } from "../../../shared/src/types/models";
-import { IResponse } from "../../../shared/src/types/api";
+import { IProduct } from "../interfaces/models";
+import { IResponse } from "../interfaces/api";
 
 export const productsApi = createApi({
   reducerPath: "productsApi",
@@ -15,7 +15,7 @@ export const productsApi = createApi({
     getProductById: builder.query<IProduct, string>({
       query: (id: string) => `products/${id}`,
     }),
-    updateProducts: builder.mutation({
+    updateProduct: builder.mutation({
       query: ({
         id,
         newProductData,
@@ -37,7 +37,7 @@ export const productsApi = createApi({
       invalidatesTags: ["Products"],
     }),
     createProduct: builder.mutation({
-      query: (body: IProduct) => ({
+      query: (body: Omit<IProduct, "_id">) => ({
         url: `products`,
         method: "POST",
         body,
@@ -50,7 +50,7 @@ export const productsApi = createApi({
 export const {
   useCreateProductMutation,
   useDeleteProductMutation,
-  useUpdateProductsMutation,
+  useUpdateProductMutation,
   useGetAllProductsQuery,
   useGetProductByIdQuery,
 } = productsApi;

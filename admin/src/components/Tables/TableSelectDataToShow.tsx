@@ -38,7 +38,7 @@ const TableSelectDataToShow = ({
         const columnNameString =
           typeof columnName === "string" ? columnName : columnName.toString();
         return (
-          <div className="my-2 space-x-4">
+          <div className="border-color my-2 space-x-4 rounded-sm border  p-2   dark:border-lime-100">
             <input
               className="accent-emerald-500 "
               name={columnNameString}
@@ -56,7 +56,7 @@ const TableSelectDataToShow = ({
       });
     } else {
       return (
-        <div>
+        <div className="border border-lime-100">
           <label htmlFor={"checkbox"}>{"checkbox"}</label>
           <input
             name={"checkbox"}
@@ -74,7 +74,7 @@ const TableSelectDataToShow = ({
   useEffect(() => {
     setList(activeCheckBoxes);
   }, [activeCheckBoxes, setList]);
-  return <form className=" p-4">{elements}</form>;
+  return <form className=" flex space-x-3 p-4">{elements}</form>;
 };
 
 export default TableSelectDataToShow;

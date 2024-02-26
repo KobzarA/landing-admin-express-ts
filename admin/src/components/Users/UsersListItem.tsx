@@ -1,4 +1,4 @@
-import { IUser } from "../../../../shared/src/types/models";
+import { IUser } from "../../interfaces/models";
 interface IUsersListItem {
   user: IUser;
   onDelete: Function;
@@ -24,7 +24,15 @@ const UsersListItem = ({ user, onDelete, onEdit }: IUsersListItem) => {
       {/* Buttons flex */}
       <div className="flex space-x-3">
         <button onClick={() => onEdit()}>Edit</button>
-        <button onClick={() => onDelete()}>Delete</button>
+        <button
+          onClick={() => {
+            if (user.email === "please@dont.delete")
+              alert("I asked you to don`t do it :)");
+            // onDelete()
+          }}
+        >
+          Delete
+        </button>
       </div>
     </li>
   );

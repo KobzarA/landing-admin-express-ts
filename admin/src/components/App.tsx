@@ -16,6 +16,7 @@ import VerifyUser from "./pages/auth/VerifyUser";
 import { useSelector } from "react-redux";
 import { RootState } from "./../store";
 import Spinner from "./Spinner/Spinner";
+import ProductsCreatePage from "./pages/ProductsCreatePage";
 
 const OrdersPage = lazy(() => import("./pages/OrdersPage"));
 const LoginPage = lazy(() => import("./pages/auth/LoginPage"));
@@ -56,6 +57,7 @@ function App() {
             <Route path="/" element={<MainPage />} />
             <Route path="/orders" element={<OrdersPage />} />
             <Route path="/products" element={<ProductsPage />} />
+            <Route path="/products/create" element={<ProductsCreatePage />} />
             <Route path="/users" element={<UsersPage />}></Route>
             <Route path="/users/create" element={<UsersCreatePage />} />
           </Route>

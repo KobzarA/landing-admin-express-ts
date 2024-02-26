@@ -6,7 +6,7 @@ interface TableChangeRowDataProps {
     row: (string | number | object | [])[];
   };
   closeMethod?: Function;
-  sendData: Function;
+  sendData: ({ id, data }: { id: string; data: object }) => void;
 }
 
 const TableChangeRowData = ({
@@ -48,7 +48,8 @@ const TableChangeRowData = ({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        sendData(formState);
+        console.log(formState["_id"], formState);
+        sendData({ id: formState["_id"], data: formState });
       }}
     >
       {formInner}

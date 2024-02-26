@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { IUser } from "../../../shared/src/types/models";
-import { IResponse } from "../../../shared/src/types/api";
+import { IUser } from "../interfaces/models";
+import { IResponse } from "../interfaces/api";
 import { API_BASE } from "../config";
 import axios, { AxiosError } from "axios";
 

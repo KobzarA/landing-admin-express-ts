@@ -17,3 +17,21 @@ const tableOrdersDataAdapter = (data: OrdersData): TableData | never => {
 };
 
 export default tableOrdersDataAdapter;
+
+/**
+ * 
+// const tableOrdersDataAdapter = <
+//   T extends { [key: string]: string | [] | object },
+// >(
+//   data: T[],
+// ): TableData | never => {
+//   if (!data) throw new Error("No data");
+//   const columnsNames = Object.keys(data[0]);
+//   const rowsData = data.map((rowObj) => {
+//     const row = Object.values(rowObj);
+//     return row;
+//   });
+
+//   return { columnsNames, rowsData };
+// };
+ */
