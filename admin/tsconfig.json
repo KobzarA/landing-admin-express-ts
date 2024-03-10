@@ -18,8 +18,5 @@
     "strictNullChecks": true,
     "strictFunctionTypes": false
   },
-  "include": ["src", "./jest-setup.ts"],
-  "paths": {
-    "@shared/*": ["../shared/*"]
-  }
+  "include": ["src", "./jest-setup.ts"]
 }
